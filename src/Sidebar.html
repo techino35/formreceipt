@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 13px; padding: 12px; color: #333; }
+    h2 { font-size: 16px; margin: 0 0 16px; color: #1a73e8; }
+    label { display: block; font-weight: bold; margin: 10px 0 4px; }
+    input[type="text"] { width: 100%; box-sizing: border-box; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; }
+    button { margin-top: 12px; padding: 8px 16px; background: #1a73e8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    button:hover { background: #1558b0; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-left: 6px; }
+    .badge-free { background: #f1f3f4; color: #5f6368; }
+    .badge-pro { background: #e8f0fe; color: #1a73e8; }
+    .msg { margin-top: 8px; font-size: 12px; color: #137333; }
+    .err { margin-top: 8px; font-size: 12px; color: #c5221f; }
+    .section { border-top: 1px solid #eee; margin-top: 16px; padding-top: 12px; }
+    .hint { font-size: 11px; color: #888; margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <h2>FormReceipt <span id="licenseBadge" class="badge">...</span></h2>
+  <label>Template Doc ID</label>
+  <input type="text" id="templateDocId" placeholder="Google Docs Document ID">
+  <div class="hint">The string after /d/ in the URL</div>
+  <label>Root Folder ID</label>
+  <input type="text" id="rootFolderId" placeholder="Drive Folder ID (empty = My Drive)">
+  <label>Admin Email</label>
+  <input type="text" id="adminEmail" placeholder="Error notification email">
+  <div class="section">
+    <label>License Key <span class="hint">(Pro plan)</span></label>
+    <input type="text" id="licenseKey" placeholder="FR-XXXX-XXXX-XXXX">
+  </div>
+  <button onclick="saveConfig()">Save</button>
+  <div id="msg" class="msg" style="display:none;"></div>
+  <div id="err" class="err" style="display:none;"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", loadConfig);
+    function loadConfig() {
+      google.script.run.withSuccessHandler(function(cfg) {
+        document.getElementById("templateDocId").value = cfg.templateDocId;
+        document.getElementById("rootFolderId").value = cfg.rootFolderId;
+        document.getElementById("adminEmail").value = cfg.adminEmail;
+        document.getElementById("licenseKey").value = cfg.licenseKey;
+        var badge = document.getElementById("licenseBadge");
+        badge.textContent = cfg.licenseType === "pro" ? "PRO" : "FREE";
+        badge.className = "badge badge-" + cfg.licenseType;
+      }).FORMRECEIPT_getConfig();
+    }
+    function saveConfig() {
+      var config = { templateDocId: document.getElementById("templateDocId").value.trim(), rootFolderId: document.getElementById("rootFolderId").value.trim(), adminEmail: document.getElementById("adminEmail").value.trim(), licenseKey: document.getElementById("licenseKey").value.trim() };
+      google.script.run.withSuccessHandler(function(r) { showMsg(r); loadConfig(); }).withFailureHandler(function(e) { showErr(e.message); }).FORMRECEIPT_saveConfig(config);
+    }
+    function showMsg(text) { var el = document.getElementById("msg"); el.textContent = text; el.style.display = "block"; document.getElementById("err").style.display = "none"; setTimeout(function() { el.style.display = "none"; }, 3000); }
+    function showErr(text) { var el = document.getElementById("err"); el.textContent = text; el.style.display = "block"; }
+  </script>
+</body>
+</html>
