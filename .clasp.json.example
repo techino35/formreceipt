@@ -1,1 +1,4 @@
-eyJzY3JpcHRJZCI6ICJZT1VSX1NDUklQVF9JRF9IRVJFIiwgInJvb3REaXIiOiAiLi9zcmMifQo=
+{
+  "scriptId": "YOUR_SCRIPT_ID_HERE",
+  "rootDir": "src"
+}

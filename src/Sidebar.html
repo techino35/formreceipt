@@ -20,18 +20,18 @@
 </head>
 <body>
   <h2>FormReceipt <span id="licenseBadge" class="badge">...</span></h2>
-  <label>Template Doc ID</label>
-  <input type="text" id="templateDocId" placeholder="Google Docs Document ID">
-  <div class="hint">The string after /d/ in the URL</div>
-  <label>Root Folder ID</label>
-  <input type="text" id="rootFolderId" placeholder="Drive Folder ID (empty = My Drive)">
-  <label>Admin Email</label>
-  <input type="text" id="adminEmail" placeholder="Error notification email">
+  <label>テンプレートDoc ID</label>
+  <input type="text" id="templateDocId" placeholder="Google DocsのDocument ID">
+  <div class="hint">URLの /d/ 以降の文字列</div>
+  <label>保存先フォルダ ID</label>
+  <input type="text" id="rootFolderId" placeholder="Drive フォルダ ID（空白=マイドライブ）">
+  <label>管理者メール</label>
+  <input type="text" id="adminEmail" placeholder="エラー通知先メールアドレス">
   <div class="section">
-    <label>License Key <span class="hint">(Pro plan)</span></label>
+    <label>ライセンスキー <span class="hint">（Pro版はこちらに入力）</span></label>
     <input type="text" id="licenseKey" placeholder="FR-XXXX-XXXX-XXXX">
   </div>
-  <button onclick="saveConfig()">Save</button>
+  <button onclick="saveConfig()">保存</button>
   <div id="msg" class="msg" style="display:none;"></div>
   <div id="err" class="err" style="display:none;"></div>
   <script>
@@ -48,11 +48,27 @@
       }).FORMRECEIPT_getConfig();
     }
     function saveConfig() {
-      var config = { templateDocId: document.getElementById("templateDocId").value.trim(), rootFolderId: document.getElementById("rootFolderId").value.trim(), adminEmail: document.getElementById("adminEmail").value.trim(), licenseKey: document.getElementById("licenseKey").value.trim() };
-      google.script.run.withSuccessHandler(function(r) { showMsg(r); loadConfig(); }).withFailureHandler(function(e) { showErr(e.message); }).FORMRECEIPT_saveConfig(config);
+      var config = {
+        templateDocId: document.getElementById("templateDocId").value.trim(),
+        rootFolderId: document.getElementById("rootFolderId").value.trim(),
+        adminEmail: document.getElementById("adminEmail").value.trim(),
+        licenseKey: document.getElementById("licenseKey").value.trim()
+      };
+      google.script.run
+        .withSuccessHandler(function(result) { showMsg(result); loadConfig(); })
+        .withFailureHandler(function(err) { showErr(err.message); })
+        .FORMRECEIPT_saveConfig(config);
     }
-    function showMsg(text) { var el = document.getElementById("msg"); el.textContent = text; el.style.display = "block"; document.getElementById("err").style.display = "none"; setTimeout(function() { el.style.display = "none"; }, 3000); }
-    function showErr(text) { var el = document.getElementById("err"); el.textContent = text; el.style.display = "block"; }
+    function showMsg(text) {
+      var el = document.getElementById("msg");
+      el.textContent = text; el.style.display = "block";
+      document.getElementById("err").style.display = "none";
+      setTimeout(function() { el.style.display = "none"; }, 3000);
+    }
+    function showErr(text) {
+      var el = document.getElementById("err");
+      el.textContent = text; el.style.display = "block";
+    }
   </script>
 </body>
 </html>

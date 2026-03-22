@@ -1,25 +1,15 @@
 # FormReceipt
 
-A Google Apps Script add-on that automatically generates PDFs from Google Form responses and emails them to respondents.
+Googleフォームの送信をトリガーに、回答内容をGoogle Docsテンプレートに差し込んでPDF生成・メール送付・Drive保存を自動化するGoogle Apps Scriptアドオン。
 
 ## Features
-- Auto PDF generation on form submit
-- Google Docs template with `{{placeholder}}` substitution
-- Email receipt with PDF attachment
-- Drive auto-save: `/FormReceipt/[form-name]/[date]_[seq].pdf`
-- Free: 10/month | Pro: Unlimited + logo insertion
+- フォーム送信時に自動でPDF生成
+- {{質問タイトル}} プレースホルダーで差し込み
+- 回答者へ受領確認メール（PDF添付）
+- Drive自動保存 `/FormReceipt/[フォーム名]/[日付]_[連番].pdf`
+- Free: 月10件 / Pro: 無制限 + ロゴ挿入
 
-## Setup
-```bash
-cp .clasp.json.example .clasp.json
-npx @google/clasp push
-```
+## License Key Format
+`FR-XXXX-XXXX-XXXX`
 
-## Placeholders
-- `{{Receipt Number}}` - Auto-generated (2024-01-0001 format)
-- `{{Submission Date/Time}}` - Form submission timestamp
-- `{{Submission Date}}` - Form submission date
-
-## License
-- Free: 10/month
-- Pro: Unlimited + logo (key format: FR-XXXX-XXXX-XXXX)
+## MIT License
